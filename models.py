@@ -27,7 +27,7 @@ class Users(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, index=True)
-    tg_id = Column(Integer, unique=True, nullable=False, index=True)
+    tg_id = Column(Integer, primary_key=True,unique=True, nullable=False, index=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     middle_name = Column(String, nullable=True)
