@@ -1,0 +1,6 @@
+2025-08-01 00:32:26,026 | ERROR | db_service | Один из пользователей не найден
+2025-08-01 00:32:46,703 | ERROR | db_service | Один из пользователей не найден
+2025-08-01 00:32:53,516 | INFO | db_service | Лайк сохранён: <models.Likes object at 0x10627edb0>
+2025-08-01 00:33:14,216 | INFO | db_service | Лайк сохранён: 10
+2025-08-01 00:34:08,199 | WARNING | db_service | Ошибка входных данных: Expecting ',' delimiter: line 4 column 15 (char 63)
+2025-08-01 00:34:31,080 | INFO | db_service | Лайк сохранён: id 11
