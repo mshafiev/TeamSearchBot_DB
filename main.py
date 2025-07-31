@@ -18,7 +18,7 @@ class OlympsBase(BaseModel):
     result: int  # 0-победитель, 1-призер, 2-финалист, 3-участник
     year: str
     is_approved: bool
-
+    is_displayed: bool
 
 
 class UsersBase(BaseModel):
@@ -39,6 +39,15 @@ class UsersBase(BaseModel):
         None  # дата рождения пользователя (в формате ДД-ММ-ГГГГ)
     )
 
+class LikesBase(BaseModel):
+    from_user_tg_id: int
+    to_user_tg_id: int
+    text: Optional[str] = None
+    is_like: bool
+    is_readed: Optional[bool] = False
+
+
+
 
 def get_db():
     db = SessionLocal()
@@ -52,8 +61,23 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 
 @app.get("/olymp/{user_tg_id}")
-async def get_olymps(user_tg_id: int, db: db_dependency):
-    result = db.query(models.Olymps).filter(models.Olymps.user_tg_id == user_tg_id).all()
+async def get_user_olymps(user_tg_id: int, db: db_dependency):
+    """
+    Получить все олимпиады пользователя по его user_tg_id.
+
+    Аргументы:
+        user_tg_id (int): Telegram ID пользователя.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Список олимпиад пользователя.
+
+    Исключения:
+        404: Если олимпиады не найдены.
+    """
+    result = (
+        db.query(models.Olymps).filter(models.Olymps.user_tg_id == user_tg_id).all()
+    )
     if not result:
         raise HTTPException(status_code=404, detail="Olymp is not found")
     return result
@@ -62,8 +86,14 @@ async def get_olymps(user_tg_id: int, db: db_dependency):
 @app.post("/olymp/create/")
 async def create_olymp(olymp: OlympsBase, db: db_dependency):
     """
-    Создаёт новую запись олимпиады на основе переданных данных.
-    Принимает объект OlympsBase, сохраняет его в базе данных и возвращает созданную запись.
+    Создать новую запись олимпиады.
+
+    Аргументы:
+        olymp (OlympsBase): Данные олимпиады.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Созданная запись олимпиады.
     """
     db_olymp = models.Olymps(
         name=olymp.name,
@@ -80,12 +110,53 @@ async def create_olymp(olymp: OlympsBase, db: db_dependency):
     return db_olymp
 
 
+@app.post("/olymp/set_display/")
+async def set_olymp_display(olymp: OlympsBase, db: db_dependency):
+    """
+    Установить флаг отображения олимпиады (is_displayed).
+
+    Аргументы:
+        olymp (OlympsBase): Данные олимпиады (используются user_tg_id, name, year, profile, is_displayed).
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Обновлённая запись олимпиады.
+
+    Исключения:
+        404: Если олимпиада не найдена.
+    """
+    existing_olymp = (
+        db.query(models.Olymps)
+        .filter(
+            models.Olymps.user_tg_id == olymp.user_tg_id,
+            models.Olymps.name == olymp.name,
+            models.Olymps.year == olymp.year,
+            models.Olymps.profile == olymp.profile,
+        )
+        .first()
+    )
+    if not existing_olymp:
+        raise HTTPException(status_code=404, detail="Олимпиада не найдена")
+    existing_olymp.is_displayed = olymp.is_displayed
+    db.commit()
+    db.refresh(existing_olymp)
+    return existing_olymp
+
+
 @app.delete("/olymp/delete/{olymp_id}")
 async def delete_olymp(olymp_id: int, db: db_dependency):
     """
-    Удаляет олимпиаду по заданному идентификатору olymp_id.
-    Если олимпиада с таким id не найдена, возвращает ошибку 404.
-    В случае успешного удаления возвращает сообщение с подтверждением.
+    Удалить олимпиаду по её идентификатору.
+
+    Аргументы:
+        olymp_id (int): ID олимпиады.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Сообщение об успешном удалении.
+
+    Исключения:
+        404: Если олимпиада не найдена.
     """
     olymp = db.query(models.Olymps).filter(models.Olymps.id == olymp_id).first()
     if not olymp:
@@ -98,8 +169,17 @@ async def delete_olymp(olymp_id: int, db: db_dependency):
 @app.post("/user/create/")
 async def create_user(tg_id: int, db: db_dependency):
     """
-    Создаёт нового пользователя по tg_id.
-    Если пользователь с таким tg_id уже существует, возвращает ошибку.
+    Создать нового пользователя по tg_id.
+
+    Аргументы:
+        tg_id (int): Telegram ID пользователя.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Статус создания пользователя.
+
+    Исключения:
+        400: Если пользователь с таким tg_id уже существует.
     """
     existing_user = db.query(models.Users).filter(models.Users.tg_id == tg_id).first()
     if existing_user:
@@ -118,8 +198,17 @@ async def create_user(tg_id: int, db: db_dependency):
 @app.get("/user/get/{tg_id}")
 async def get_user(tg_id: int, db: db_dependency):
     """
-    Ищет пользователя по tg_id, если находит, то возвращает все поля.
-    Иначе выводит ошибку
+    Получить пользователя по tg_id.
+
+    Аргументы:
+        tg_id (int): Telegram ID пользователя.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Данные пользователя.
+
+    Исключения:
+        404: Если пользователь не найден.
     """
     result = db.query(models.Users).filter(models.Users.tg_id == tg_id).first()
     if not result:
@@ -130,9 +219,17 @@ async def get_user(tg_id: int, db: db_dependency):
 @app.put("/user/update/", response_model=UsersBase)
 async def update_user(user: UsersBase, db: db_dependency):
     """
-    Обновляет пользователя по tg_id.
-    Если пользователь найден, обновляет только те поля, которые не равны None в запросе.
-    Если пользователь не найден, возвращает ошибку.
+    Обновить данные пользователя по tg_id.
+
+    Аргументы:
+        user (UsersBase): Данные пользователя для обновления.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Обновлённые данные пользователя (только те поля, которые были переданы).
+
+    Исключения:
+        404: Если пользователь не найден.
     """
     existing_user = (
         db.query(models.Users).filter(models.Users.tg_id == user.tg_id).first()
@@ -163,12 +260,21 @@ async def update_user(user: UsersBase, db: db_dependency):
     db.refresh(existing_user)
     return user
 
+
 @app.delete("/user/delete/{user_tg_id}")
 async def delete_user(user_tg_id: int, db: db_dependency):
     """
-    Удаляет пользователя по tg_id.
-    Если пользователь найден, удаляет его из базы данных.
-    Если пользователь не найден, возвращает ошибку 404.
+    Удалить пользователя по tg_id.
+
+    Аргументы:
+        user_tg_id (int): Telegram ID пользователя.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Сообщение об успешном удалении.
+
+    Исключения:
+        404: Если пользователь не найден.
     """
     user = db.query(models.Users).filter(models.Users.tg_id == user_tg_id).first()
     if not user:
@@ -176,3 +282,103 @@ async def delete_user(user_tg_id: int, db: db_dependency):
     db.delete(user)
     db.commit()
     return {"detail": f"Пользователь с tg_id {user_tg_id} успешно удален"}
+
+
+@app.post("/like/create/")
+async def create_like(like: LikesBase, db: db_dependency):
+    """
+    Создать новый лайк.
+
+    Аргументы:
+        like (LikesBase): Данные лайка.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Созданная запись лайка.
+    """
+    db_like = models.Likes(
+        from_user_tg_id=like.from_user_tg_id,
+        to_user_tg_id=like.to_user_tg_id,
+        text=like.text,
+        is_like=like.is_like,
+        is_readed=like.is_readed,
+    )
+    db.add(db_like)
+    db.commit()
+    db.refresh(db_like)
+    return db_like
+
+@app.delete("/like/delete/")
+async def delete_like(id: int, db: db_dependency):
+    """
+    Удалить лайк по id
+
+    Аргументы:
+        id (int): id лайка
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Сообщение об успешном удалении.
+
+    Исключения:
+        404: Если лайк не найден.
+    """
+    like = db.query(models.Likes).filter(
+        models.Likes.id == id,
+    ).first()
+    if not like:
+        raise HTTPException(status_code=404, detail="Лайк не найден")
+    db.delete(like)
+    db.commit()
+    return {"detail": f"Like with id {id} was deleted"}
+
+
+@app.patch("/like/read/")
+async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int, db: db_dependency):
+    """
+    Изменить статус "прочитано" у лайка.
+
+    Аргументы:
+        from_user_tg_id (int): Telegram ID пользователя, который поставил лайк.
+        to_user_tg_id (int): Telegram ID пользователя, которому поставлен лайк.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Обновленная запись лайка.
+
+    Исключения:
+        404: Если лайк не найден.
+    """
+    like = db.query(models.Likes).filter(
+        models.Likes.from_user_tg_id == from_user_tg_id,
+        models.Likes.to_user_tg_id == to_user_tg_id
+    ).order_by(models.Likes.id.desc()).first()
+    if not like:
+        raise HTTPException(status_code=404, detail="Лайк не найден")
+    like.is_readed = True
+    db.commit()
+    db.refresh(like)
+    return like
+
+
+@app.get("/like/last/")
+async def get_last_likes(user_tg_id: int, count: int, db: db_dependency):
+    """
+    Получить последние X лайков пользователя.
+
+    Аргументы:
+        user_tg_id (int): Telegram ID пользователя, для которого ищем лайки (to_user_tg_id).
+        count (int): Количество последних лайков для возврата.
+        db (Session): Сессия базы данных.
+
+    Возвращает:
+        Список последних лайков (может быть меньше, если лайков меньше чем count).
+    """
+    likes = (
+        db.query(models.Likes)
+        .filter(models.Likes.from_user_tg_id == user_tg_id)
+        .order_by(models.Likes.id.desc())
+        .limit(count)
+        .all()
+    )
+    return likes

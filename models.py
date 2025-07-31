@@ -13,6 +13,7 @@ class Olymps(Base):
     result = Column(Integer, nullable=False)  # 0-победитель, 1-призер, 2-финалист, 3-участник
     year = Column(String, nullable=False)
     is_approved = Column(Boolean, default=False)
+    is_displayed = Column(Boolean, default=False)
 
 
 
@@ -36,3 +37,14 @@ class Users(Base):
     date_of_birth = Column(
         String, nullable=True
     )  # дата рождения пользователя (в формате ДД-ММ-ГГГГ)
+
+
+class Likes(Base):
+    __tablename__ = "likes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    from_user_tg_id = Column(Integer, ForeignKey("users.tg_id"), nullable=False)
+    to_user_tg_id = Column(Integer, ForeignKey("users.tg_id"), nullable=False)
+    text = Column(String, nullable=True)
+    is_like = Column(Boolean, nullable=False)
+    is_readed = Column(Boolean, default=False)
