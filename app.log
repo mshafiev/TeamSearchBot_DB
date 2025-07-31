@@ -4,3 +4,4 @@
 2025-08-01 00:33:14,216 | INFO | db_service | Лайк сохранён: 10
 2025-08-01 00:34:08,199 | WARNING | db_service | Ошибка входных данных: Expecting ',' delimiter: line 4 column 15 (char 63)
 2025-08-01 00:34:31,080 | INFO | db_service | Лайк сохранён: id 11
+2025-08-01 00:57:07,543 | INFO | db_service | Лайк сохранён: id 12

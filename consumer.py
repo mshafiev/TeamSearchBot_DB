@@ -1,19 +1,28 @@
-from pika import ConnectionParameters, BlockingConnection
-from pydantic import BaseModel
-from typing import List, Annotated
+from pika import ConnectionParameters, BlockingConnection, PlainCredentials
 import models
 from database import engine, SessionLocal
-from sqlalchemy.orm import Session
-from typing import Optional
-from main import db_dependency, LikesBase
+from main import LikesBase
 import atexit
 from logger_config import logger
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+
+RMQ_USER = os.getenv("RMQ_USER")
+RMQ_PASS = os.getenv("RMQ_PASS")
+RMQ_HOST = os.getenv("RMQ_HOST")
+RMQ_PORT = int(os.getenv("RMQ_PORT", 5672))
+
+credentials = PlainCredentials(RMQ_USER, RMQ_PASS)
 
 connection_params = ConnectionParameters(
-    host="localhost",
-    port=5672,
+    host=RMQ_HOST,
+    port=RMQ_PORT,
+    credentials=credentials,
 )
+
 db = SessionLocal()
 atexit.register(db.close)
 
