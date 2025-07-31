@@ -8,28 +8,19 @@ class Olymps(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     profile = Column(String, nullable=False)
-    subject = Column(String, nullable=False)
-    level = Column(Integer, nullable=False)  # 1,2,3, 0-не рсош
-    link = Column(String, nullable=True)
-
-
-class OlympResult(Base):
-    __tablename__ = "olymp_results"
-
-    id = Column(Integer, primary_key=True, index=True)
-    olymp_id = Column(Integer, ForeignKey("olymps.id"), nullable=False, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    result = Column(
-        Integer, nullable=False
-    )  # 0-победитель, 1-призер, 2-финалист, 3-участник
+    level = Column(Integer, default=0)  # 1,2,3, 0-не рсош
+    user_tg_id = Column(Integer, ForeignKey("users.tg_id"), nullable=False)
+    result = Column(Integer, nullable=False)  # 0-победитель, 1-призер, 2-финалист, 3-участник
     year = Column(String, nullable=False)
+    is_approved = Column(Boolean, default=False)
+
 
 
 class Users(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    tg_id = Column(Integer, primary_key=True, unique=True, nullable=False, index=True)
+    tg_id = Column(Integer,  unique=True, nullable=False, index=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     middle_name = Column(String, nullable=True)
