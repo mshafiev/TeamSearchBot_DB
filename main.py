@@ -39,14 +39,13 @@ class UsersBase(BaseModel):
         None  # дата рождения пользователя (в формате ДД-ММ-ГГГГ)
     )
 
+
 class LikesBase(BaseModel):
     from_user_tg_id: int
     to_user_tg_id: int
     text: Optional[str] = None
     is_like: bool
     is_readed: Optional[bool] = False
-
-
 
 
 def get_db():
@@ -308,6 +307,7 @@ async def create_like(like: LikesBase, db: db_dependency):
     db.refresh(db_like)
     return db_like
 
+
 @app.delete("/like/delete/")
 async def delete_like(id: int, db: db_dependency):
     """
@@ -323,9 +323,13 @@ async def delete_like(id: int, db: db_dependency):
     Исключения:
         404: Если лайк не найден.
     """
-    like = db.query(models.Likes).filter(
-        models.Likes.id == id,
-    ).first()
+    like = (
+        db.query(models.Likes)
+        .filter(
+            models.Likes.id == id,
+        )
+        .first()
+    )
     if not like:
         raise HTTPException(status_code=404, detail="Лайк не найден")
     db.delete(like)
@@ -333,7 +337,7 @@ async def delete_like(id: int, db: db_dependency):
     return {"detail": f"Like with id {id} was deleted"}
 
 
-@app.patch("/like/read/")
+@app.patch("/like/set_read/")
 async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int, db: db_dependency):
     """
     Изменить статус "прочитано" у лайка.
@@ -349,10 +353,15 @@ async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int, db: db_depen
     Исключения:
         404: Если лайк не найден.
     """
-    like = db.query(models.Likes).filter(
-        models.Likes.from_user_tg_id == from_user_tg_id,
-        models.Likes.to_user_tg_id == to_user_tg_id
-    ).order_by(models.Likes.id.desc()).first()
+    like = (
+        db.query(models.Likes)
+        .filter(
+            models.Likes.from_user_tg_id == from_user_tg_id,
+            models.Likes.to_user_tg_id == to_user_tg_id,
+        )
+        .order_by(models.Likes.id.desc())
+        .first()
+    )
     if not like:
         raise HTTPException(status_code=404, detail="Лайк не найден")
     like.is_readed = True
@@ -361,7 +370,7 @@ async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int, db: db_depen
     return like
 
 
-@app.get("/like/last/")
+@app.get("/like/get_last/")
 async def get_last_likes(user_tg_id: int, count: int, db: db_dependency):
     """
     Получить последние X лайков пользователя.

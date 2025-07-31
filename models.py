@@ -10,18 +10,19 @@ class Olymps(Base):
     profile = Column(String, nullable=False)
     level = Column(Integer, default=0)  # 1,2,3, 0-не рсош
     user_tg_id = Column(Integer, ForeignKey("users.tg_id"), nullable=False)
-    result = Column(Integer, nullable=False)  # 0-победитель, 1-призер, 2-финалист, 3-участник
+    result = Column(
+        Integer, nullable=False
+    )  # 0-победитель, 1-призер, 2-финалист, 3-участник
     year = Column(String, nullable=False)
     is_approved = Column(Boolean, default=False)
     is_displayed = Column(Boolean, default=False)
-
 
 
 class Users(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    tg_id = Column(Integer,  unique=True, nullable=False, index=True)
+    tg_id = Column(Integer, unique=True, nullable=False, index=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     middle_name = Column(String, nullable=True)
