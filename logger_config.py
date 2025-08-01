@@ -13,6 +13,6 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
 # Обработчик — в файл
-file_handler = logging.FileHandler("app.log")
+file_handler = logging.FileHandler("app_rmq.log")
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)

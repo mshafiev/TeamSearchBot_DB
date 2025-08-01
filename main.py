@@ -6,9 +6,17 @@ from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from typing import Optional
 import atexit
+from logger_config import logger
+from logger import logger, validation_exception_handler, http_exception_handler
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.exceptions import RequestValidationError
+
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
+
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 
 
 class OlympsBase(BaseModel):
@@ -73,6 +81,7 @@ async def get_user_olymps(user_tg_id: int):
         db.query(models.Olymps).filter(models.Olymps.user_tg_id == user_tg_id).all()
     )
     if not result:
+        logger.warning(f"Ошибка Olymp is not found")
         raise HTTPException(status_code=404, detail="Olymp is not found")
     return result
 
