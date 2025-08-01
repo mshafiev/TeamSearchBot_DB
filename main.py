@@ -54,8 +54,6 @@ db = SessionLocal()
 atexit.register(db.close)
 
 
-
-
 @app.get("/olymp/{user_tg_id}")
 async def get_user_olymps(user_tg_id: int):
     """
@@ -388,3 +386,8 @@ async def get_last_likes(user_tg_id: int, count: int):
         .all()
     )
     return likes
+
+
+@app.get("/test/{test}")
+async def get_test(test: int):
+    return test
