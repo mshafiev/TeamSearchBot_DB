@@ -5,6 +5,7 @@ import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from typing import Optional
+import atexit
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -48,19 +49,15 @@ class LikesBase(BaseModel):
     is_readed: Optional[bool] = False
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+
+db = SessionLocal()
+atexit.register(db.close)
 
 
-db_dependency = Annotated[Session, Depends(get_db)]
 
 
 @app.get("/olymp/{user_tg_id}")
-async def get_user_olymps(user_tg_id: int, db: db_dependency):
+async def get_user_olymps(user_tg_id: int):
     """
     Получить все олимпиады пользователя по его user_tg_id.
 
@@ -83,7 +80,7 @@ async def get_user_olymps(user_tg_id: int, db: db_dependency):
 
 
 @app.post("/olymp/create/")
-async def create_olymp(olymp: OlympsBase, db: db_dependency):
+async def create_olymp(olymp: OlympsBase):
     """
     Создать новую запись олимпиады.
 
@@ -110,7 +107,7 @@ async def create_olymp(olymp: OlympsBase, db: db_dependency):
 
 
 @app.post("/olymp/set_display/")
-async def set_olymp_display(olymp: OlympsBase, db: db_dependency):
+async def set_olymp_display(olymp: OlympsBase):
     """
     Установить флаг отображения олимпиады (is_displayed).
 
@@ -143,7 +140,7 @@ async def set_olymp_display(olymp: OlympsBase, db: db_dependency):
 
 
 @app.delete("/olymp/delete/{olymp_id}")
-async def delete_olymp(olymp_id: int, db: db_dependency):
+async def delete_olymp(olymp_id: int):
     """
     Удалить олимпиаду по её идентификатору.
 
@@ -166,7 +163,7 @@ async def delete_olymp(olymp_id: int, db: db_dependency):
 
 
 @app.post("/user/create/")
-async def create_user(tg_id: int, db: db_dependency):
+async def create_user(tg_id: int):
     """
     Создать нового пользователя по tg_id.
 
@@ -195,7 +192,7 @@ async def create_user(tg_id: int, db: db_dependency):
 
 
 @app.get("/user/get/{tg_id}")
-async def get_user(tg_id: int, db: db_dependency):
+async def get_user(tg_id: int):
     """
     Получить пользователя по tg_id.
 
@@ -216,7 +213,7 @@ async def get_user(tg_id: int, db: db_dependency):
 
 
 @app.put("/user/update/", response_model=UsersBase)
-async def update_user(user: UsersBase, db: db_dependency):
+async def update_user(user: UsersBase):
     """
     Обновить данные пользователя по tg_id.
 
@@ -261,7 +258,7 @@ async def update_user(user: UsersBase, db: db_dependency):
 
 
 @app.delete("/user/delete/{user_tg_id}")
-async def delete_user(user_tg_id: int, db: db_dependency):
+async def delete_user(user_tg_id: int):
     """
     Удалить пользователя по tg_id.
 
@@ -284,7 +281,7 @@ async def delete_user(user_tg_id: int, db: db_dependency):
 
 
 @app.post("/like/create/")
-async def create_like(like: LikesBase, db: db_dependency):
+async def create_like(like: LikesBase):
     """
     Создать новый лайк.
 
@@ -309,7 +306,7 @@ async def create_like(like: LikesBase, db: db_dependency):
 
 
 @app.delete("/like/delete/")
-async def delete_like(id: int, db: db_dependency):
+async def delete_like(id: int):
     """
     Удалить лайк по id
 
@@ -338,7 +335,7 @@ async def delete_like(id: int, db: db_dependency):
 
 
 @app.patch("/like/set_read/")
-async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int, db: db_dependency):
+async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int):
     """
     Изменить статус "прочитано" у лайка.
 
@@ -371,7 +368,7 @@ async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int, db: db_depen
 
 
 @app.get("/like/get_last/")
-async def get_last_likes(user_tg_id: int, count: int, db: db_dependency):
+async def get_last_likes(user_tg_id: int, count: int):
     """
     Получить последние X лайков пользователя.
 
