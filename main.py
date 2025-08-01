@@ -89,6 +89,10 @@ async def create_olymp(olymp: OlympsBase):
     Возвращает:
         Созданная запись олимпиады.
     """
+    user = db.query(models.Users).filter(models.Users.tg_id == olymp.tg_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User is not found")
+    
     db_olymp = models.Olymps(
         name=olymp.name,
         profile=olymp.profile,
