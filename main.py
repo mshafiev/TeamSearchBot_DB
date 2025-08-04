@@ -255,6 +255,8 @@ async def update_user(user: UsersBase):
         "goal",
         "who_interested",
         "date_of_birth",
+        "face_photo_id",
+        "photo_id"
     ]
     for field in update_fields:
         value = getattr(user, field)
