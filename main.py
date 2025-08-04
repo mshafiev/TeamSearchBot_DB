@@ -47,6 +47,8 @@ class UsersBase(BaseModel):
     date_of_birth: Optional[str] = (
         None  # дата рождения пользователя (в формате ДД-ММ-ГГГГ)
     )
+    face_photo_id: Optional[str] = None
+    photo_id: Optional[str] = None
 
 
 class LikesBase(BaseModel):

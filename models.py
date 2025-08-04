@@ -38,6 +38,8 @@ class Users(Base):
     date_of_birth = Column(
         String, nullable=True
     )  # дата рождения пользователя (в формате ДД-ММ-ГГГГ)
+    face_photo_id = Column(String, nullable=True)
+    photo_id = Column(String, nullable=True)
 
 
 class Likes(Base):
