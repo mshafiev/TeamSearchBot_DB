@@ -213,13 +213,8 @@ async def get_user(tg_id: int):
 
     Возвращает:
         Данные пользователя.
-
-    Исключения:
-        404: Если пользователь не найден.
     """
     result = db.query(models.Users).filter(models.Users.tg_id == tg_id).first()
-    if not result:
-        raise HTTPException(status_code=404, detail="User is not found")
     return result
 
 
