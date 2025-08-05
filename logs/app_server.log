@@ -1,0 +1,1 @@
+2025-08-05 17:45:12,753 [WARNING] app: HTTP ошибка 404 при запросе DELETE http://localhost:8000/user/delete/1008114047: Пользователь не найден

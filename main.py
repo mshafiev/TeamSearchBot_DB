@@ -26,8 +26,8 @@ class OlympsBase(BaseModel):
     user_tg_id: int
     result: int  # 0-победитель, 1-призер, 2-финалист, 3-участник
     year: str
-    is_approved: bool
-    is_displayed: bool
+    is_approved: Optional[bool] = None
+    is_displayed: Optional[bool] = None
 
 
 class UsersBase(BaseModel):
@@ -49,6 +49,7 @@ class UsersBase(BaseModel):
     )
     face_photo_id: Optional[str] = None
     photo_id: Optional[str] = None
+    description: Optional[str] = None
 
 
 class LikesBase(BaseModel):
@@ -112,6 +113,7 @@ async def create_olymp(olymp: OlympsBase):
         result=olymp.result,
         year=olymp.year,
         is_approved=olymp.is_approved,
+        is_displayed=olymp.is_displayed,
     )
     db.add(db_olymp)
     db.commit()
@@ -207,17 +209,19 @@ async def create_user(tg_id: int):
 @app.get("/user/get/{tg_id}")
 async def get_user(tg_id: int):
     """
-    Получить пользователя по tg_id.
+    Получить пользователя по tg_id вместе с его олимпиадами.
 
     Аргументы:
         tg_id (int): Telegram ID пользователя.
-        db (Session): Сессия базы данных.
 
     Возвращает:
-        Данные пользователя.
+        Данные пользователя с полем olymps (массив его олимпиад).
     """
-    result = db.query(models.Users).filter(models.Users.tg_id == tg_id).first()
-    return result
+    user = db.query(models.Users).filter(models.Users.tg_id == tg_id).first()
+    olymps = db.query(models.Olymps).filter(models.Olymps.user_tg_id == tg_id).all()
+    user_data = user.__dict__.copy()
+    user_data["olymps"] = [olymp.__dict__ for olymp in olymps]
+    return user_data
 
 
 @app.put("/user/update/", response_model=UsersBase)
@@ -256,7 +260,8 @@ async def update_user(user: UsersBase):
         "who_interested",
         "date_of_birth",
         "face_photo_id",
-        "photo_id"
+        "photo_id",
+        "description"
     ]
     for field in update_fields:
         value = getattr(user, field)
