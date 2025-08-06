@@ -122,7 +122,7 @@ async def create_olymp(olymp: OlympsBase):
 
 
 @app.post("/olymp/set_display/")
-async def set_olymp_display(olymp: OlympsBase):
+async def set_olymp_display(olymp_id: int):
     """
     Установить флаг отображения олимпиады (is_displayed).
 
@@ -139,16 +139,13 @@ async def set_olymp_display(olymp: OlympsBase):
     existing_olymp = (
         db.query(models.Olymps)
         .filter(
-            models.Olymps.user_tg_id == olymp.user_tg_id,
-            models.Olymps.name == olymp.name,
-            models.Olymps.year == olymp.year,
-            models.Olymps.profile == olymp.profile,
+            models.Olymps.id == olymp_id,
         )
         .first()
     )
     if not existing_olymp:
         raise HTTPException(status_code=404, detail="Олимпиада не найдена")
-    existing_olymp.is_displayed = olymp.is_displayed
+    existing_olymp.is_displayed = not existing_olymp.is_displayed
     db.commit()
     db.refresh(existing_olymp)
     return existing_olymp
