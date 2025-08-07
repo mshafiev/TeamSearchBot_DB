@@ -41,6 +41,7 @@ class Users(Base):
     face_photo_id = Column(String, nullable=True)
     photo_id = Column(String, nullable=True)
     description = Column(String, nullable=True)
+    gender = Column(Boolean, nullable=True) # 0m 1g
 
 
 class Likes(Base):

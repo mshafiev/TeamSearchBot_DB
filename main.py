@@ -50,6 +50,7 @@ class UsersBase(BaseModel):
     face_photo_id: Optional[str] = None
     photo_id: Optional[str] = None
     description: Optional[str] = None
+    gender: Optional[bool] = None # 0m 1g
 
 
 class LikesBase(BaseModel):
@@ -215,10 +216,13 @@ async def get_user(tg_id: int):
         Данные пользователя с полем olymps (массив его олимпиад).
     """
     user = db.query(models.Users).filter(models.Users.tg_id == tg_id).first()
+    if not user:
+        return None
     olymps = db.query(models.Olymps).filter(models.Olymps.user_tg_id == tg_id).all()
     user_data = user.__dict__.copy()
     user_data["olymps"] = [olymp.__dict__ for olymp in olymps]
     return user_data
+
 
 
 @app.put("/user/update/", response_model=UsersBase)
@@ -258,7 +262,8 @@ async def update_user(user: UsersBase):
         "date_of_birth",
         "face_photo_id",
         "photo_id",
-        "description"
+        "description",
+        "gender"
     ]
     for field in update_fields:
         value = getattr(user, field)
@@ -405,3 +410,15 @@ async def get_last_likes(user_tg_id: int, count: int):
 @app.get("/test/{test}")
 async def get_test(test: int):
     return test
+
+
+@app.get("/users/all")
+async def get_all_users():
+    """
+    Получить всех пользователей.
+
+    Возвращает:
+        Список всех пользователей из базы данных.
+    """
+    users = db.query(models.Users).all()
+    return users
