@@ -1,5 +1,17 @@
-/venv
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+logs/
+*.log
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/
 .env
+venv/
+.alembic/
 alembic.ini
-/alembic
-/__pycache__

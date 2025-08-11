@@ -1,11 +1,12 @@
 from pika import ConnectionParameters, BlockingConnection, PlainCredentials
 import models
 from database import engine, SessionLocal
-from main import LikesBase
-from logger_config import logger
+from schemas import LikesBase
+from logger import logger
 import os
 from dotenv import load_dotenv
 import json
+import time
 
 load_dotenv()
 
@@ -20,6 +21,8 @@ connection_params = ConnectionParameters(
     host=RMQ_HOST,
     port=RMQ_PORT,
     credentials=credentials,
+    heartbeat=30,
+    blocked_connection_timeout=300,
 )
 
 def callback(ch, method, properties, body):
@@ -72,15 +75,22 @@ def callback(ch, method, properties, body):
         db.close()
 
 def main():
-    with BlockingConnection(connection_params) as conn:
-        with conn.channel() as ch:
-            ch.queue_declare(queue="likes")
+    while True:
+        try:
+            with BlockingConnection(connection_params) as conn:
+                with conn.channel() as ch:
+                    ch.queue_declare(queue="likes", durable=True)
+                    ch.basic_qos(prefetch_count=50)
+                    ch.basic_consume(
+                        queue="likes",
+                        on_message_callback=callback,
+                    )
+                    logger.info("Started consuming from 'likes' queue")
+                    ch.start_consuming()
+        except Exception as exc:
+            logger.error(f"RabbitMQ connection error: {exc}. Reconnecting in 5s...")
+            time.sleep(5)
 
-            ch.basic_consume(
-                queue="likes",
-                on_message_callback=callback,
-            )
-            ch.start_consuming()
 
 if __name__ == "__main__":
     main()
