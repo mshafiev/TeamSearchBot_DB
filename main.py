@@ -1,16 +1,13 @@
 from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
-from typing import List, Annotated
-import models
-from database import engine, SessionLocal
-from sqlalchemy.orm import Session
 from typing import Optional
-import atexit
-from logger_config import logger
+import models
+from database import engine, get_db
+from sqlalchemy.orm import Session
 from logger import logger, validation_exception_handler, http_exception_handler
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exceptions import RequestValidationError
-
+from schemas import OlympCreate, UserCreate, UserUpdate, LikeCreate
+from messaging import publish_like
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -19,55 +16,8 @@ app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 
 
-class OlympsBase(BaseModel):
-    name: str
-    profile: str
-    level: int  # 1,2,3, 0-не рсош
-    user_tg_id: int
-    result: int  # 0-победитель, 1-призер, 2-финалист, 3-участник
-    year: str
-    is_approved: Optional[bool] = None
-    is_displayed: Optional[bool] = None
-
-
-class UsersBase(BaseModel):
-    tg_id: int
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    middle_name: Optional[str] = None
-    phone: Optional[str] = None
-    phone_verified: Optional[bool] = False  # поле для верификации телефона
-    age: Optional[int] = None
-    city: Optional[str] = None
-    status: Optional[int] = None  # 0-свободен / 1-в отношениях
-    goal: Optional[int] = (
-        None  # 0-совместный бот, 1-общение, 2-поиск команды, 3-отношения
-    )
-    who_interested: Optional[int] = None  # 0-ж / 1-м / 2-все
-    date_of_birth: Optional[str] = (
-        None  # дата рождения пользователя (в формате ДД-ММ-ГГГГ)
-    )
-    face_photo_id: Optional[str] = None
-    photo_id: Optional[str] = None
-    description: Optional[str] = None
-    gender: Optional[bool] = None # 0m 1g
-
-
-class LikesBase(BaseModel):
-    from_user_tg_id: int
-    to_user_tg_id: int
-    text: Optional[str] = None
-    is_like: bool
-    is_readed: Optional[bool] = False
-
-
-
-db = SessionLocal()
-atexit.register(db.close)
-
-
 @app.get("/olymp/{user_tg_id}")
-async def get_user_olymps(user_tg_id: int):
+async def get_user_olymps(user_tg_id: int, db: Session = Depends(get_db)):
     """
     Получить все олимпиады пользователя по его user_tg_id.
 
@@ -91,12 +41,12 @@ async def get_user_olymps(user_tg_id: int):
 
 
 @app.post("/olymp/create/")
-async def create_olymp(olymp: OlympsBase):
+async def create_olymp(olymp: OlympCreate, db: Session = Depends(get_db)):
     """
     Создать новую запись олимпиады.
 
     Аргументы:
-        olymp (OlympsBase): Данные олимпиады.
+        olymp (OlympCreate): Данные олимпиады.
         db (Session): Сессия базы данных.
 
     Возвращает:
@@ -105,7 +55,7 @@ async def create_olymp(olymp: OlympsBase):
     user = db.query(models.Users).filter(models.Users.tg_id == olymp.user_tg_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User is not found")
-    
+
     db_olymp = models.Olymps(
         name=olymp.name,
         profile=olymp.profile,
@@ -123,12 +73,12 @@ async def create_olymp(olymp: OlympsBase):
 
 
 @app.post("/olymp/set_display/")
-async def set_olymp_display(olymp_id: int):
+async def set_olymp_display(olymp_id: int, db: Session = Depends(get_db)):
     """
     Установить флаг отображения олимпиады (is_displayed).
 
     Аргументы:
-        olymp (OlympsBase): Данные олимпиады (используются user_tg_id, name, year, profile, is_displayed).
+        olymp_id (int): Идентификатор олимпиады.
         db (Session): Сессия базы данных.
 
     Возвращает:
@@ -153,7 +103,7 @@ async def set_olymp_display(olymp_id: int):
 
 
 @app.delete("/olymp/delete/{olymp_id}")
-async def delete_olymp(olymp_id: int):
+async def delete_olymp(olymp_id: int, db: Session = Depends(get_db)):
     """
     Удалить олимпиаду по её идентификатору.
 
@@ -176,12 +126,12 @@ async def delete_olymp(olymp_id: int):
 
 
 @app.post("/user/create/")
-async def create_user(tg_id: int):
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     """
     Создать нового пользователя по tg_id.
 
     Аргументы:
-        tg_id (int): Telegram ID пользователя.
+        user (UserCreate): Данные пользователя.
         db (Session): Сессия базы данных.
 
     Возвращает:
@@ -190,22 +140,18 @@ async def create_user(tg_id: int):
     Исключения:
         400: Если пользователь с таким tg_id уже существует.
     """
-    existing_user = db.query(models.Users).filter(models.Users.tg_id == tg_id).first()
+    existing_user = db.query(models.Users).filter(models.Users.tg_id == user.tg_id).first()
     if existing_user:
-        raise HTTPException(
-            status_code=400, detail="Пользователь с таким tg_id уже существует"
-        )
-    new_user = models.Users(tg_id=tg_id)
+        raise HTTPException(status_code=400, detail="Пользователь с таким tg_id уже существует")
+    new_user = models.Users(tg_id=user.tg_id)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return {
-        "status": "OK",
-    }
+    return {"status": "OK"}
 
 
 @app.get("/user/get/{tg_id}")
-async def get_user(tg_id: int):
+async def get_user(tg_id: int, db: Session = Depends(get_db)):
     """
     Получить пользователя по tg_id вместе с его олимпиадами.
 
@@ -220,18 +166,22 @@ async def get_user(tg_id: int):
         return None
     olymps = db.query(models.Olymps).filter(models.Olymps.user_tg_id == tg_id).all()
     user_data = user.__dict__.copy()
-    user_data["olymps"] = [olymp.__dict__ for olymp in olymps]
+    user_data["olymps"] = [
+        {k: v for k, v in olymp.__dict__.items() if k != "_sa_instance_state"}
+        for olymp in olymps
+    ]
+    # Remove SQLAlchemy state from user dict as well
+    user_data.pop("_sa_instance_state", None)
     return user_data
 
 
-
-@app.put("/user/update/", response_model=UsersBase)
-async def update_user(user: UsersBase):
+@app.put("/user/update/")
+async def update_user(user: UserUpdate, db: Session = Depends(get_db)):
     """
     Обновить данные пользователя по tg_id.
 
     Аргументы:
-        user (UsersBase): Данные пользователя для обновления.
+        user (UserUpdate): Данные пользователя для обновления.
         db (Session): Сессия базы данных.
 
     Возвращает:
@@ -263,7 +213,7 @@ async def update_user(user: UsersBase):
         "face_photo_id",
         "photo_id",
         "description",
-        "gender"
+        "gender",
     ]
     for field in update_fields:
         value = getattr(user, field)
@@ -275,7 +225,7 @@ async def update_user(user: UsersBase):
 
 
 @app.delete("/user/delete/{user_tg_id}")
-async def delete_user(user_tg_id: int):
+async def delete_user(user_tg_id: int, db: Session = Depends(get_db)):
     """
     Удалить пользователя по tg_id.
 
@@ -298,32 +248,34 @@ async def delete_user(user_tg_id: int):
 
 
 @app.post("/like/create/")
-async def create_like(like: LikesBase):
+async def create_like(like: LikeCreate, db: Session = Depends(get_db)):
     """
     Создать новый лайк.
 
     Аргументы:
-        like (LikesBase): Данные лайка.
+        like (LikeCreate): Данные лайка.
         db (Session): Сессия базы данных.
 
     Возвращает:
-        Созданная запись лайка.
+        Статус постановки лайка в очередь.
     """
-    db_like = models.Likes(
-        from_user_tg_id=like.from_user_tg_id,
-        to_user_tg_id=like.to_user_tg_id,
-        text=like.text,
-        is_like=like.is_like,
-        is_readed=like.is_readed,
-    )
-    db.add(db_like)
-    db.commit()
-    db.refresh(db_like)
-    return db_like
+    # Validate users exist to avoid junk in the queue
+    from_user = db.query(models.Users).filter(models.Users.tg_id == like.from_user_tg_id).first()
+    to_user = db.query(models.Users).filter(models.Users.tg_id == like.to_user_tg_id).first()
+    if not from_user or not to_user:
+        raise HTTPException(status_code=404, detail="Один из пользователей не найден")
+
+    # Publish for async processing
+    try:
+        publish_like(like)
+        return {"status": "ENQUEUED"}
+    except Exception as e:
+        logger.error(f"Не удалось отправить сообщение в очередь: {e}")
+        raise HTTPException(status_code=503, detail="Service unavailable")
 
 
 @app.delete("/like/delete/")
-async def delete_like(id: int):
+async def delete_like(id: int, db: Session = Depends(get_db)):
     """
     Удалить лайк по id
 
@@ -352,7 +304,7 @@ async def delete_like(id: int):
 
 
 @app.patch("/like/set_read/")
-async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int):
+async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int, db: Session = Depends(get_db)):
     """
     Изменить статус "прочитано" у лайка.
 
@@ -385,7 +337,7 @@ async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int):
 
 
 @app.get("/like/get_last/")
-async def get_last_likes(user_tg_id: int, count: int):
+async def get_last_likes(user_tg_id: int, count: int, db: Session = Depends(get_db)):
     """
     Получить последние X лайков пользователя.
 
@@ -399,7 +351,7 @@ async def get_last_likes(user_tg_id: int, count: int):
     """
     likes = (
         db.query(models.Likes)
-        .filter(models.Likes.from_user_tg_id == user_tg_id)
+        .filter(models.Likes.to_user_tg_id == user_tg_id)
         .order_by(models.Likes.id.desc())
         .limit(count)
         .all()
@@ -413,7 +365,7 @@ async def get_test(test: int):
 
 
 @app.get("/users/all")
-async def get_all_users():
+async def get_all_users(db: Session = Depends(get_db)):
     """
     Получить всех пользователей.
 
