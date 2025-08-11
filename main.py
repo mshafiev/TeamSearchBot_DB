@@ -18,12 +18,21 @@ models.Base.metadata.create_all(bind=engine)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)
 
+# короткоживущая сессия БД на каждый запрос
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 class OlympsBase(BaseModel):
     name: str
     profile: str
     level: int  # 1,2,3, 0-не рсош
-    user_tg_id: int
+    user_tg_id: str
     result: int  # 0-победитель, 1-призер, 2-финалист, 3-участник
     year: str
     is_approved: Optional[bool] = None
@@ -31,7 +40,7 @@ class OlympsBase(BaseModel):
 
 
 class UsersBase(BaseModel):
-    tg_id: int
+    tg_id: str
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     middle_name: Optional[str] = None
@@ -54,8 +63,8 @@ class UsersBase(BaseModel):
 
 
 class LikesBase(BaseModel):
-    from_user_tg_id: int
-    to_user_tg_id: int
+    from_user_tg_id: str
+    to_user_tg_id: str
     text: Optional[str] = None
     is_like: bool
     is_readed: Optional[bool] = False
@@ -67,12 +76,12 @@ atexit.register(db.close)
 
 
 @app.get("/olymp/{user_tg_id}")
-async def get_user_olymps(user_tg_id: int):
+async def get_user_olymps(user_tg_id: str, db: Session = Depends(get_db)):
     """
     Получить все олимпиады пользователя по его user_tg_id.
 
     Аргументы:
-        user_tg_id (int): Telegram ID пользователя.
+        user_tg_id (str): Telegram ID пользователя.
         db (Session): Сессия базы данных.
 
     Возвращает:
@@ -91,7 +100,7 @@ async def get_user_olymps(user_tg_id: int):
 
 
 @app.post("/olymp/create/")
-async def create_olymp(olymp: OlympsBase):
+async def create_olymp(olymp: OlympsBase, db: Session = Depends(get_db)):
     """
     Создать новую запись олимпиады.
 
@@ -123,7 +132,7 @@ async def create_olymp(olymp: OlympsBase):
 
 
 @app.post("/olymp/set_display/")
-async def set_olymp_display(olymp_id: int):
+async def set_olymp_display(olymp_id: int, db: Session = Depends(get_db)):
     """
     Установить флаг отображения олимпиады (is_displayed).
 
@@ -153,12 +162,12 @@ async def set_olymp_display(olymp_id: int):
 
 
 @app.delete("/olymp/delete/{olymp_id}")
-async def delete_olymp(olymp_id: int):
+async def delete_olymp(olymp_id: int, db: Session = Depends(get_db)):
     """
     Удалить олимпиаду по её идентификатору.
 
     Аргументы:
-        olymp_id (int): ID олимпиады.
+        olymp_id (str): ID олимпиады.
         db (Session): Сессия базы данных.
 
     Возвращает:
@@ -176,7 +185,7 @@ async def delete_olymp(olymp_id: int):
 
 
 @app.post("/user/create/")
-async def create_user(tg_id: int):
+async def create_user(tg_id: str, db: Session = Depends(get_db)):
     """
     Создать нового пользователя по tg_id.
 
@@ -205,7 +214,7 @@ async def create_user(tg_id: int):
 
 
 @app.get("/user/get/{tg_id}")
-async def get_user(tg_id: int):
+async def get_user(tg_id: str, db: Session = Depends(get_db)):
     """
     Получить пользователя по tg_id вместе с его олимпиадами.
 
@@ -226,7 +235,7 @@ async def get_user(tg_id: int):
 
 
 @app.put("/user/update/", response_model=UsersBase)
-async def update_user(user: UsersBase):
+async def update_user(user: UsersBase, db: Session = Depends(get_db)):
     """
     Обновить данные пользователя по tg_id.
 
@@ -275,7 +284,7 @@ async def update_user(user: UsersBase):
 
 
 @app.delete("/user/delete/{user_tg_id}")
-async def delete_user(user_tg_id: int):
+async def delete_user(user_tg_id: str, db: Session = Depends(get_db)):
     """
     Удалить пользователя по tg_id.
 
@@ -298,7 +307,7 @@ async def delete_user(user_tg_id: int):
 
 
 @app.post("/like/create/")
-async def create_like(like: LikesBase):
+async def create_like(like: LikesBase, db: Session = Depends(get_db)):
     """
     Создать новый лайк.
 
@@ -323,12 +332,12 @@ async def create_like(like: LikesBase):
 
 
 @app.delete("/like/delete/")
-async def delete_like(id: int):
+async def delete_like(id: int, db: Session = Depends(get_db)):
     """
     Удалить лайк по id
 
     Аргументы:
-        id (int): id лайка
+        id (str): id лайка
         db (Session): Сессия базы данных.
 
     Возвращает:
@@ -352,7 +361,7 @@ async def delete_like(id: int):
 
 
 @app.patch("/like/set_read/")
-async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int):
+async def set_like_readed(from_user_tg_id: str, to_user_tg_id: str, db: Session = Depends(get_db)):
     """
     Изменить статус "прочитано" у лайка.
 
@@ -385,7 +394,7 @@ async def set_like_readed(from_user_tg_id: int, to_user_tg_id: int):
 
 
 @app.get("/like/get_last/")
-async def get_last_likes(user_tg_id: int, count: int):
+async def get_last_likes(user_tg_id: str, count: int, db: Session = Depends(get_db)):
     """
     Получить последние X лайков пользователя.
 
@@ -407,13 +416,32 @@ async def get_last_likes(user_tg_id: int, count: int):
     return likes
 
 
+@app.get("/like/get_incoming/")
+async def get_incoming_likes(user_tg_id: str, only_unread: bool = True, count: int = 50, db: Session = Depends(get_db)):
+    """
+    Получить входящие лайки (кому вы понравились).
+
+    Args:
+        user_tg_id: TG ID пользователя, которому поставили лайк
+        only_unread: вернуть только непросмотренные (is_readed=False)
+        count: ограничение количества
+    """
+    q = db.query(models.Likes).filter(
+        models.Likes.to_user_tg_id == user_tg_id,
+        models.Likes.is_like == True,
+    ).order_by(models.Likes.id.desc())
+    if only_unread:
+        q = q.filter(models.Likes.is_readed == False)
+    return q.limit(count).all()
+
+
 @app.get("/test/{test}")
 async def get_test(test: int):
     return test
 
 
 @app.get("/users/all")
-async def get_all_users():
+async def get_all_users(db: Session = Depends(get_db)):
     """
     Получить всех пользователей.
 
@@ -422,3 +450,28 @@ async def get_all_users():
     """
     users = db.query(models.Users).all()
     return users
+
+
+@app.get("/like/exists/")
+async def like_exists(from_user_tg_id: str, to_user_tg_id: str, is_like: bool = True, db: Session = Depends(get_db)):
+    """
+    Проверить, существует ли лайк с указанными параметрами.
+
+    Args:
+        from_user_tg_id: Telegram ID пользователя, который поставил лайк
+        to_user_tg_id: Telegram ID пользователя, которому поставлен лайк
+        is_like: Флаг лайка (True = лайк, False = дизлайк)
+
+    Returns:
+        {"exists": bool}
+    """
+    like = (
+        db.query(models.Likes)
+        .filter(
+            models.Likes.from_user_tg_id == from_user_tg_id,
+            models.Likes.to_user_tg_id == to_user_tg_id,
+            models.Likes.is_like == is_like,
+        )
+        .first()
+    )
+    return {"exists": like is not None}

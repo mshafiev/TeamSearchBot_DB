@@ -1,0 +1,338 @@
+2025-08-08 17:50:24,760 | INFO | db_service | Лайк сохранён: id 1
+2025-08-08 17:50:24,762 | INFO | db_service | Лайк сохранён: id 2
+2025-08-08 17:50:24,764 | INFO | db_service | Лайк сохранён: id 3
+2025-08-08 18:14:50,359 | INFO | db_service | Лайк сохранён: id 4
+2025-08-08 18:15:20,194 | INFO | db_service | Лайк сохранён: id 5
+2025-08-08 18:16:54,611 | INFO | db_service | Лайк сохранён: id 6
+2025-08-08 18:17:33,001 | INFO | db_service | Лайк сохранён: id 7
+2025-08-08 18:17:36,065 | INFO | db_service | Лайк сохранён: id 8
+2025-08-08 18:17:38,211 | INFO | db_service | Лайк сохранён: id 9
+2025-08-08 18:17:39,914 | INFO | db_service | Лайк сохранён: id 10
+2025-08-08 18:17:41,663 | INFO | db_service | Лайк сохранён: id 11
+2025-08-08 18:17:43,277 | INFO | db_service | Лайк сохранён: id 12
+2025-08-08 18:17:57,952 | INFO | db_service | Лайк сохранён: id 13
+2025-08-08 18:19:21,581 | INFO | db_service | Лайк сохранён: id 14
+2025-08-08 18:19:23,953 | INFO | db_service | Лайк сохранён: id 15
+2025-08-08 18:19:26,982 | INFO | db_service | Лайк сохранён: id 16
+2025-08-08 18:19:28,848 | INFO | db_service | Лайк сохранён: id 17
+2025-08-08 18:19:37,740 | INFO | db_service | Лайк сохранён: id 18
+2025-08-08 18:19:44,904 | INFO | db_service | Лайк сохранён: id 19
+2025-08-11 15:52:06,625 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,626 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=3, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=2, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,627 | WARNING | db_service | Ошибка входных данных: 2 validation errors for LikesBase
+from_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1008114047, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+to_user_tg_id
+  Input should be a valid string [type=string_type, input_value=1165085695, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_type
+2025-08-11 15:52:06,640 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "d7553411-91bd-4144-b306-c5900b0da653"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('d7553411-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': 'd7553411-91bd-4144-b306-c5900b0da653', 'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:52:06,642 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "1e896266-b9c5-4e66-ad8a-de5d2e019f1d"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('1e896266-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': '1e896266-b9c5-4e66-ad8a-de5d2e019f1d', 'from_user_tg_id': '8362964488', 'to_user_tg_id': '1008114047', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:52:06,643 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "5e00409d-efad-4609-bf86-5ea8b6577249"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('5e00409d-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': '5e00409d-efad-4609-bf86-5ea8b6577249', 'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:52:34,416 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "a8019fdb-c87f-4d5f-9b99-a738a3f3b5db"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('a8019fdb-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': 'a8019fdb-c87f-4d5f-9b99-a738a3f3b5db', 'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:52:34,418 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "a6ba3b20-ce01-429e-8e01-bd3433ee5f9e"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('a6ba3b20-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': 'a6ba3b20-ce01-429e-8e01-bd3433ee5f9e', 'from_user_tg_id': '8362964488', 'to_user_tg_id': '1008114047', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:52:34,420 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "14409039-63fe-463f-b7aa-980a6be377ce"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('14409039-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': '14409039-63fe-463f-b7aa-980a6be377ce', 'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:53:55,944 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "1b7fd85f-3679-4088-bab5-9cde7e057964"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('1b7fd85f-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': '1b7fd85f-3679-4088-bab5-9cde7e057964', 'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:53:55,946 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "187f5b4e-92ef-4d1e-96e2-34070c845695"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('187f5b4e-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': '187f5b4e-92ef-4d1e-96e2-34070c845695', 'from_user_tg_id': '8362964488', 'to_user_tg_id': '1008114047', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:53:55,948 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "a0ad922d-affd-4fd9-9329-e3e2b9a654d3"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('a0ad922d-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': 'a0ad922d-affd-4fd9-9329-e3e2b9a654d3', 'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:54:15,025 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "86f48ac1-7ea5-4a2c-9951-2c7338f5b58b"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('86f48ac1-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': '86f48ac1-7ea5-4a2c-9951-2c7338f5b58b', 'from_user_tg_id': '8362964488', 'to_user_tg_id': '1008114047', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:57:43,015 | ERROR | db_service | Ошибка (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type integer: "c849b9c2-b4a1-49ac-9267-a0df6874e521"
+LINE 1: ... to_user_tg_id, text, is_like, is_readed) VALUES ('c849b9c2-...
+                                                             ^
+
+[SQL: INSERT INTO likes (id, from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(id)s, %(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s)]
+[parameters: {'id': 'c849b9c2-b4a1-49ac-9267-a0df6874e521', 'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-11 15:59:21,647 | ERROR | db_service | Ошибка (psycopg2.errors.NotNullViolation) null value in column "id" of relation "likes" violates not-null constraint
+DETAIL:  Failing row contains (null, 8362964488, 1008114047, null, t, f).
+
+[SQL: INSERT INTO likes (from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s) RETURNING likes.id]
+[parameters: {'from_user_tg_id': '8362964488', 'to_user_tg_id': '1008114047', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-08-11 15:59:21,649 | ERROR | db_service | Ошибка (psycopg2.errors.NotNullViolation) null value in column "id" of relation "likes" violates not-null constraint
+DETAIL:  Failing row contains (null, 1008114047, 8362964488, null, t, f).
+
+[SQL: INSERT INTO likes (from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s) RETURNING likes.id]
+[parameters: {'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-08-11 16:01:14,482 | ERROR | db_service | Ошибка (psycopg2.errors.NotNullViolation) null value in column "id" of relation "likes" violates not-null constraint
+DETAIL:  Failing row contains (null, 8362964488, 1008114047, null, t, f).
+
+[SQL: INSERT INTO likes (from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s) RETURNING likes.id]
+[parameters: {'from_user_tg_id': '8362964488', 'to_user_tg_id': '1008114047', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-08-11 16:01:14,484 | ERROR | db_service | Ошибка (psycopg2.errors.NotNullViolation) null value in column "id" of relation "likes" violates not-null constraint
+DETAIL:  Failing row contains (null, 1008114047, 8362964488, null, t, f).
+
+[SQL: INSERT INTO likes (from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s) RETURNING likes.id]
+[parameters: {'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-08-11 16:01:29,417 | ERROR | db_service | Ошибка (psycopg2.errors.NotNullViolation) null value in column "id" of relation "likes" violates not-null constraint
+DETAIL:  Failing row contains (null, 1008114047, 8362964488, null, t, f).
+
+[SQL: INSERT INTO likes (from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s) RETURNING likes.id]
+[parameters: {'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-08-11 16:03:52,989 | ERROR | db_service | Ошибка при сохранении лайка: (psycopg2.errors.NotNullViolation) null value in column "id" of relation "likes" violates not-null constraint
+DETAIL:  Failing row contains (null, 1008114047, 8362964488, null, t, f).
+
+[SQL: INSERT INTO likes (from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s) RETURNING likes.id]
+[parameters: {'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-08-11 16:04:05,932 | ERROR | db_service | Ошибка при сохранении лайка: (psycopg2.errors.NotNullViolation) null value in column "id" of relation "likes" violates not-null constraint
+DETAIL:  Failing row contains (null, 1008114047, 8362964488, null, t, f).
+
+[SQL: INSERT INTO likes (from_user_tg_id, to_user_tg_id, text, is_like, is_readed) VALUES (%(from_user_tg_id)s, %(to_user_tg_id)s, %(text)s, %(is_like)s, %(is_readed)s) RETURNING likes.id]
+[parameters: {'from_user_tg_id': '1008114047', 'to_user_tg_id': '8362964488', 'text': None, 'is_like': True, 'is_readed': False}]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-08-11 16:07:40,736 | INFO | db_service | Лайк сохранён: id 1
+2025-08-11 16:09:40,623 | INFO | db_service | Лайк сохранён: id 2
+2025-08-11 16:15:12,129 | INFO | db_service | Лайк сохранён: id 3
+2025-08-11 16:15:32,210 | INFO | db_service | Лайк сохранён: id 4
+2025-08-11 16:15:38,983 | INFO | db_service | Лайк сохранён: id 5
+2025-08-11 16:16:00,143 | INFO | db_service | Лайк сохранён: id 6
+2025-08-11 16:17:57,667 | INFO | db_service | Лайк сохранён: id 7
+2025-08-11 16:21:05,702 | INFO | db_service | Лайк сохранён: id 8
+2025-08-11 16:22:10,480 | INFO | db_service | Лайк сохранён: id 9
+2025-08-11 16:22:54,388 | INFO | db_service | Лайк сохранён: id 10
+2025-08-11 16:29:21,182 | INFO | db_service | Лайк сохранён: id 11
+2025-08-11 16:30:25,102 | INFO | db_service | Лайк сохранён: id 12
+2025-08-11 16:31:01,447 | INFO | db_service | Лайк сохранён: id 13
+2025-08-11 16:35:26,263 | INFO | db_service | Лайк сохранён: id 14
+2025-08-11 16:35:29,707 | INFO | db_service | Лайк сохранён: id 15
+2025-08-11 16:40:11,663 | INFO | db_service | Лайк сохранён: id 16
+2025-08-11 16:40:14,806 | INFO | db_service | Лайк сохранён: id 17
+2025-08-11 16:41:39,172 | INFO | db_service | Лайк сохранён: id 18

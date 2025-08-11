@@ -1,5 +1,10 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from database import Base
+import uuid
+
+
+def generate_uuid_str() -> str:
+    return str(uuid.uuid4())
 
 
 class Olymps(Base):
@@ -9,7 +14,7 @@ class Olymps(Base):
     name = Column(String, nullable=False)
     profile = Column(String, nullable=False)
     level = Column(Integer, default=0)  # 1,2,3, 0-не рсош
-    user_tg_id = Column(Integer, ForeignKey("users.tg_id", ondelete="CASCADE"), nullable=False)
+    user_tg_id = Column(String, ForeignKey("users.tg_id", ondelete="CASCADE"), nullable=False)
     result = Column(
         Integer, nullable=False
     )  # 0-победитель, 1-призер, 2-финалист, 3-участник
@@ -22,7 +27,7 @@ class Users(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    tg_id = Column(Integer, unique=True, nullable=False, index=True)
+    tg_id = Column(String, unique=True, nullable=False, index=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     middle_name = Column(String, nullable=True)
@@ -48,8 +53,8 @@ class Likes(Base):
     __tablename__ = "likes"
 
     id = Column(Integer, primary_key=True, index=True)
-    from_user_tg_id = Column(Integer, ForeignKey("users.tg_id", ondelete="CASCADE"), nullable=False)
-    to_user_tg_id = Column(Integer, ForeignKey("users.tg_id", ondelete="CASCADE"), nullable=False)
+    from_user_tg_id = Column(String, ForeignKey("users.tg_id", ondelete="CASCADE"), nullable=False)
+    to_user_tg_id = Column(String, ForeignKey("users.tg_id", ondelete="CASCADE"), nullable=False)
     text = Column(String, nullable=True)
     is_like = Column(Boolean, nullable=False)
     is_readed = Column(Boolean, default=False)

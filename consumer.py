@@ -2,13 +2,12 @@ from pika import ConnectionParameters, BlockingConnection, PlainCredentials
 import models
 from database import engine, SessionLocal
 from main import LikesBase
-import atexit
 from logger_config import logger
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
-
 
 RMQ_USER = os.getenv("RMQ_USER")
 RMQ_PASS = os.getenv("RMQ_PASS")
@@ -23,22 +22,19 @@ connection_params = ConnectionParameters(
     credentials=credentials,
 )
 
-db = SessionLocal()
-atexit.register(db.close)
-
-
-import json
-
-
 def callback(ch, method, properties, body):
     try:
         data = json.loads(body.decode())
+        # Проверяем, что id не передаётся в LikesBase (и не попадёт в insert)
+        if "id" in data:
+            data.pop("id")
         like = LikesBase(**data)
     except Exception as e:
         logger.warning(f"Ошибка входных данных: {e}")
         ch.basic_ack(delivery_tag=method.delivery_tag)
         return
 
+    db = SessionLocal()
     try:
         from_user = (
             db.query(models.Users)
@@ -55,6 +51,7 @@ def callback(ch, method, properties, body):
             ch.basic_ack(delivery_tag=method.delivery_tag)
             return
 
+        # Явно не передаём id при создании лайка
         db_like = models.Likes(
             from_user_tg_id=like.from_user_tg_id,
             to_user_tg_id=like.to_user_tg_id,
@@ -69,8 +66,10 @@ def callback(ch, method, properties, body):
         ch.basic_ack(delivery_tag=method.delivery_tag)
     except Exception as e:
         db.rollback()
-        logger.error(f"Ошибка {e}")
-
+        logger.error(f"Ошибка при сохранении лайка: {e}")
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+    finally:
+        db.close()
 
 def main():
     with BlockingConnection(connection_params) as conn:
@@ -82,7 +81,6 @@ def main():
                 on_message_callback=callback,
             )
             ch.start_consuming()
-
 
 if __name__ == "__main__":
     main()
