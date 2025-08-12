@@ -23,7 +23,7 @@ class UsersBase(BaseModel):
     last_name: Optional[str] = Field(default=None, max_length=100)
     middle_name: Optional[str] = Field(default=None, max_length=100)
     phone: Optional[str] = Field(default=None, max_length=32)
-    phone_verified: Optional[bool] = False
+    username: Optional[str] = Field(default=None, max_length=32)
     age: Optional[int] = Field(default=None, ge=0, le=150)
     city: Optional[str] = Field(default=None, max_length=100)
     status: Optional[int] = Field(default=None, ge=0, le=1)

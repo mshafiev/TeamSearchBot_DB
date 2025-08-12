@@ -347,3 +347,12 @@ DETAIL:  Failing row contains (null, 1008114047, 8362964488, null, t, f).
 2025-08-12 17:47:46,508 | INFO | db_service | Лайк сохранён: id 27
 2025-08-12 17:48:19,863 | INFO | db_service | Лайк сохранён: id 28
 2025-08-12 17:48:24,235 | INFO | db_service | Лайк сохранён: id 29
+2025-08-12 19:02:37,339 | INFO | db_service | Лайк сохранён: id 1
+2025-08-12 19:02:37,341 | INFO | db_service | Лайк сохранён: id 2
+2025-08-12 19:02:37,342 | ERROR | db_service | Ошибка при сохранении лайка: (406, 'PRECONDITION_FAILED - unknown delivery tag 1')
+2025-08-12 19:02:55,451 | INFO | db_service | Лайк сохранён: id 3
+2025-08-12 19:03:12,331 | INFO | db_service | Лайк сохранён: id 4
+2025-08-12 19:03:24,474 | INFO | db_service | Лайк сохранён: id 5
+2025-08-12 19:03:57,263 | INFO | db_service | Лайк сохранён: id 6
+2025-08-12 19:05:26,203 | INFO | db_service | Лайк сохранён: id 7
+2025-08-12 19:06:55,273 | INFO | db_service | Лайк сохранён: id 8

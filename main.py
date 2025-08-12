@@ -221,7 +221,7 @@ async def update_user(user: UsersBase, db: Session = Depends(get_db)):
         "last_name",
         "middle_name",
         "phone",
-        "phone_verified",
+        "username",
         "age",
         "city",
         "status",
