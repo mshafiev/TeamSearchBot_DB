@@ -34,7 +34,7 @@ def create_like(db: Session, like: LikesBase) -> models.Likes:
 def get_last_likes(db: Session, user_tg_id: str, count: int) -> List[models.Likes]:
     return (
         db.query(models.Likes)
-        .filter(models.Likes.to_user_tg_id == user_tg_id)
+        .filter(models.Likes.from_user_tg_id == user_tg_id)
         .order_by(models.Likes.id.desc())
         .limit(count)
         .all()

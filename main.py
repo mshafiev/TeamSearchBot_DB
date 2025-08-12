@@ -333,21 +333,22 @@ async def set_like_readed(from_user_tg_id: str, to_user_tg_id: str, db: Session 
     Исключения:
         404: Если лайк не найден.
     """
-    like = (
+    likes = (
         db.query(models.Likes)
         .filter(
             models.Likes.from_user_tg_id == from_user_tg_id,
             models.Likes.to_user_tg_id == to_user_tg_id,
         )
         .order_by(models.Likes.id.desc())
-        .first()
+        .all()
     )
-    if not like:
+    if not likes:
         raise HTTPException(status_code=404, detail="Лайк не найден")
-    like.is_readed = True
-    db.commit()
-    db.refresh(like)
-    return like
+    for like in likes:
+        like.is_readed = True
+        db.commit()
+        db.refresh(like)
+    return likes
 
 
 @app.get("/like/get_last/")
