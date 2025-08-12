@@ -5,15 +5,16 @@ import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from typing import Optional
-import atexit
-from logger_config import logger
 from logger import logger, validation_exception_handler, http_exception_handler
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exceptions import RequestValidationError
+from schemas import OlympsBase, UsersBase, LikesBase
+from services.likes_service import create_like as service_create_like, get_last_likes as service_get_last_likes, like_exists as service_like_exists
 
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
+logger.info("Application startup: tables ensured and exception handlers registered")
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)
@@ -28,51 +29,9 @@ def get_db():
         db.close()
 
 
-class OlympsBase(BaseModel):
-    name: str
-    profile: str
-    level: int  # 1,2,3, 0-не рсош
-    user_tg_id: str
-    result: int  # 0-победитель, 1-призер, 2-финалист, 3-участник
-    year: str
-    is_approved: Optional[bool] = None
-    is_displayed: Optional[bool] = None
-
-
-class UsersBase(BaseModel):
-    tg_id: str
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    middle_name: Optional[str] = None
-    phone: Optional[str] = None
-    phone_verified: Optional[bool] = False  # поле для верификации телефона
-    age: Optional[int] = None
-    city: Optional[str] = None
-    status: Optional[int] = None  # 0-свободен / 1-в отношениях
-    goal: Optional[int] = (
-        None  # 0-совместный бот, 1-общение, 2-поиск команды, 3-отношения
-    )
-    who_interested: Optional[int] = None  # 0-ж / 1-м / 2-все
-    date_of_birth: Optional[str] = (
-        None  # дата рождения пользователя (в формате ДД-ММ-ГГГГ)
-    )
-    face_photo_id: Optional[str] = None
-    photo_id: Optional[str] = None
-    description: Optional[str] = None
-    gender: Optional[bool] = None # 0m 1g
-
-
-class LikesBase(BaseModel):
-    from_user_tg_id: str
-    to_user_tg_id: str
-    text: Optional[str] = None
-    is_like: bool
-    is_readed: Optional[bool] = False
 
 
 
-db = SessionLocal()
-atexit.register(db.close)
 
 
 @app.get("/olymp/{user_tg_id}")
@@ -318,17 +277,15 @@ async def create_like(like: LikesBase, db: Session = Depends(get_db)):
     Возвращает:
         Созданная запись лайка.
     """
-    db_like = models.Likes(
-        from_user_tg_id=like.from_user_tg_id,
-        to_user_tg_id=like.to_user_tg_id,
-        text=like.text,
-        is_like=like.is_like,
-        is_readed=like.is_readed,
-    )
-    db.add(db_like)
-    db.commit()
-    db.refresh(db_like)
-    return db_like
+    try:
+        created = service_create_like(db, like)
+        return created
+    except ValueError as ve:
+        logger.warning(f"Ошибка создания лайка: {ve}")
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        logger.exception("Не удалось создать лайк")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @app.delete("/like/delete/")
@@ -396,24 +353,13 @@ async def set_like_readed(from_user_tg_id: str, to_user_tg_id: str, db: Session 
 @app.get("/like/get_last/")
 async def get_last_likes(user_tg_id: str, count: int, db: Session = Depends(get_db)):
     """
-    Получить последние X лайков пользователя.
-
-    Аргументы:
-        user_tg_id (int): Telegram ID пользователя, для которого ищем лайки (to_user_tg_id).
-        count (int): Количество последних лайков для возврата.
-        db (Session): Сессия базы данных.
-
-    Возвращает:
-        Список последних лайков (может быть меньше, если лайков меньше чем count).
+    Получить последние X лайков пользователя (кому он понравился).
     """
-    likes = (
-        db.query(models.Likes)
-        .filter(models.Likes.from_user_tg_id == user_tg_id)
-        .order_by(models.Likes.id.desc())
-        .limit(count)
-        .all()
-    )
-    return likes
+    try:
+        return service_get_last_likes(db, user_tg_id, count)
+    except Exception:
+        logger.exception("Не удалось получить последние лайки")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @app.get("/like/get_incoming/")
@@ -454,24 +400,8 @@ async def get_all_users(db: Session = Depends(get_db)):
 
 @app.get("/like/exists/")
 async def like_exists(from_user_tg_id: str, to_user_tg_id: str, is_like: bool = True, db: Session = Depends(get_db)):
-    """
-    Проверить, существует ли лайк с указанными параметрами.
-
-    Args:
-        from_user_tg_id: Telegram ID пользователя, который поставил лайк
-        to_user_tg_id: Telegram ID пользователя, которому поставлен лайк
-        is_like: Флаг лайка (True = лайк, False = дизлайк)
-
-    Returns:
-        {"exists": bool}
-    """
-    like = (
-        db.query(models.Likes)
-        .filter(
-            models.Likes.from_user_tg_id == from_user_tg_id,
-            models.Likes.to_user_tg_id == to_user_tg_id,
-            models.Likes.is_like == is_like,
-        )
-        .first()
-    )
-    return {"exists": like is not None}
+    try:
+        return {"exists": service_like_exists(db, from_user_tg_id, to_user_tg_id, is_like)}
+    except Exception:
+        logger.exception("Ошибка проверки существования лайка")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
