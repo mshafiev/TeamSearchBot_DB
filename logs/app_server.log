@@ -40,3 +40,9 @@
 2025-08-12 19:02:52,749 [INFO] app: Application startup: tables ensured and exception handlers registered
 2025-08-12 19:02:55,422 [INFO] app: Application startup: tables ensured and exception handlers registered
 2025-08-12 19:41:45,794 [INFO] app: Application startup: tables ensured and exception handlers registered
+2025-08-14 14:45:53,166 [INFO] app: Application startup: tables ensured and exception handlers registered
+2025-08-14 19:02:22,164 [INFO] app: Application startup: tables ensured and exception handlers registered
+2025-08-14 19:02:24,394 [INFO] app: Application startup: tables ensured and exception handlers registered
+2025-08-14 19:02:30,050 [INFO] app: Application startup: tables ensured and exception handlers registered
+2025-08-14 19:03:07,478 [WARNING] app: HTTP ошибка 400 при запросе POST http://localhost:8000/olymp/create/: Olympiad already exists with the same data
+2025-08-14 19:03:07,482 [WARNING] app: HTTP ошибка 400 при запросе POST http://localhost:8000/olymp/create/: Olympiad already exists with the same data

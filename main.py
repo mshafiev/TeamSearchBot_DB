@@ -68,11 +68,23 @@ async def create_olymp(olymp: OlympsBase, db: Session = Depends(get_db)):
         db (Session): Сессия базы данных.
 
     Возвращает:
-        Созданная запись олимпиады.
+        Созданная запись олимпиады или сообщение об ошибке, если запись уже существует.
     """
     user = db.query(models.Users).filter(models.Users.tg_id == olymp.user_tg_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User is not found")
+    
+    existing_olymp = db.query(models.Olymps).filter(
+        models.Olymps.name == olymp.name,
+        models.Olymps.profile == olymp.profile,
+        models.Olymps.level == olymp.level,
+        models.Olymps.user_tg_id == olymp.user_tg_id,
+        models.Olymps.result == olymp.result,
+        models.Olymps.year == olymp.year,
+    ).first()
+
+    if existing_olymp:
+        raise HTTPException(status_code=400, detail="Olympiad already exists with the same data")
     
     db_olymp = models.Olymps(
         name=olymp.name,
