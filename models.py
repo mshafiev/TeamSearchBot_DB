@@ -31,7 +31,6 @@ class Users(Base):
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     middle_name = Column(String, nullable=True)
-    phone = Column(String, nullable=True)
     username = Column(String, nullable=True)
     age = Column(Integer, nullable=True)
     city = Column(String, nullable=True)
